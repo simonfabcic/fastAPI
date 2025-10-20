@@ -6,14 +6,14 @@
 
 -   Make sure you have pipenv installed. If not, you can install it using:
 
-```bash
+```shell
 pip install pipenv
 ```
 
 -   Create a virtual environment and install the dependencies:  
      If you want to have the venv into the system directory, delete `.venv` folder in the root of the project:
 
-```bash
+```shell
 # create and activate virtual env
 pipenv shell
 # and instal dependencies
@@ -27,6 +27,48 @@ pipenv install --dev
     and find the location of python file:
     `...\.venv\Scripts\python.exe`
     If you want to check the current interpreter, run:
-    ```shell
-    pipenv --venv
-    ```
+
+```shell
+pipenv --venv
+```
+
+-   run the server:
+
+```shell
+uvicorn main:app --reload
+```
+
+## Creating the project
+
+### Installing `FastAPI`
+
+Install `FastAPI`:
+
+```shell
+pipenv install fastapi
+```
+
+Install Uvicorn (ASGI server) as dev dependency: Uvicorn is a lightweight server used to run FastAPI apps
+
+```shell
+pipenv install uvicorn -d
+```
+
+Create the basic `main.py` file:
+
+```py
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello, FastAPI!"}
+```
+
+run the server:
+
+```shell
+uvicorn main:app --reload
+```
