@@ -9,9 +9,9 @@ class Task(BaseModel):
 
 
 class TasksList(BaseModel):
-    title: str
+    title: str | None = None
     tasks: list[Task] = []
-    is_hidden: bool = False
+    is_archived: bool = False
 
 
 # seed data
@@ -52,6 +52,7 @@ tasks_lists: list[TasksList] = [
             Task(task_name="Watch a movie"),
             Task(task_name="Visit grandparents"),
         ],
+        is_archived=True,
     ),
 ]
 
@@ -117,6 +118,13 @@ def update_task(list_id: int, task_id: int, task: Task):
         updated_task = task_in_db_model.model_copy(update=request_data)
         tasks_lists[list_id].tasks[task_id] = updated_task
         return updated_task
+
+
+@app.delete("/task/{list_id}/{task_id}/", response_model=Task)
+def delete_task(list_id: int, task_id: int):
+    if is_valid_task_id(list_id, task_id):
+        deleted_task = tasks_lists[list_id].tasks.pop(task_id)
+        return deleted_task
 
 
 def is_valid_tasks_list_id(list_id: int):
