@@ -1,11 +1,14 @@
-import { useState } from "react";
-import "./App.css";
+import Header from "../components/Header";
+import MainFeed from "../components/MainFeed";
 
 function App() {
     return (
-        <>
-            <h1>Tasks</h1>
-        </>
+        <div className="bg-gray-100">
+            <Header />
+            <div className="max-w-5xl mx-auto">
+                <MainFeed />
+            </div>
+        </div>
     );
 }
 
