@@ -16,7 +16,7 @@ const Header = () => {
                 </div>
                 <div className="gap-2 hidden">Search</div>
                 <button className="bg-yellow-400 hover:bg-yellow-500 text-gary-900 font-semibold px-6 py-2 rounded-full flex gap-2 transition-colors cursor-pointer">
-                    Add Fact
+                    Add List
                 </button>
             </div>
         </header>

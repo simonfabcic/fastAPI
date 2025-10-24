@@ -85,6 +85,11 @@ const Tasks = ({ menuSelection }: TasksProps) => {
 
                                         {/* List uncompleted */}
                                         <div className="flex flex-col gap-2">
+                                            <input
+                                                type="text"
+                                                className="bg-yellow-100 rounded-2xl w-full px-3 py-1 border border-black"
+                                            />
+                                            {/* TODO add `tick` to confirm input, `x` to delete */}
                                             {task_list.tasks.map(
                                                 (task, task_index) =>
                                                     !task.is_done && (
