@@ -1,6 +1,17 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Archive, ArchiveRestore, FileCheck2, PartyPopper, RotateCcw, SquareCheckBig, Trash2 } from "lucide-react";
+import {
+    Archive,
+    ArchiveRestore,
+    CircleCheck,
+    CirclePlus,
+    CircleX,
+    FileCheck2,
+    PartyPopper,
+    RotateCcw,
+    SquareCheckBig,
+    Trash2,
+} from "lucide-react";
 
 type Task = {
     task_name: string;
@@ -19,6 +30,7 @@ type TasksProps = {
 
 const Tasks = ({ menuSelection }: TasksProps) => {
     const [tasksLists, setTasksLists] = useState<TasksList[]>();
+    const [showTaskInput, setShowTaskInput] = useState<number>();
 
     const getTasks = () => {
         axios
@@ -61,6 +73,23 @@ const Tasks = ({ menuSelection }: TasksProps) => {
             });
     };
 
+    const handleSubmitNewTask = (list_id: number, e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const task_name = e.currentTarget.task_name.value;
+        if (task_name == false) {
+            return;
+        }
+        e.currentTarget.reset();
+
+        axios
+            .post(`${import.meta.env.VITE_API_ENDPOINT}/task/${list_id}`, {
+                task_name: task_name,
+            })
+            .then(function () {
+                getTasks();
+            });
+    };
+
     const renderContent = () => {
         if (!tasksLists) {
             return;
@@ -85,11 +114,43 @@ const Tasks = ({ menuSelection }: TasksProps) => {
 
                                         {/* List uncompleted */}
                                         <div className="flex flex-col gap-2">
-                                            <input
-                                                type="text"
-                                                className="bg-yellow-100 rounded-2xl w-full px-3 py-1 border border-black"
-                                            />
-                                            {/* TODO add `tick` to confirm input, `x` to delete */}
+                                            {!showTaskInput && (
+                                                <button
+                                                    type="button"
+                                                    className="bg-yellow-100 rounded-2xl px-3 py-1 w-fit flex gap-1.5 items-center"
+                                                    onClick={() => setShowTaskInput(list_index)}
+                                                >
+                                                    <CirclePlus className="h-5" />
+                                                    <p>Add task</p>
+                                                </button>
+                                            )}
+                                            {showTaskInput === list_index && (
+                                                <form
+                                                    action=""
+                                                    onSubmit={(e) => {
+                                                        handleSubmitNewTask(list_index, e);
+                                                    }}
+                                                    className="flex relative items-center"
+                                                >
+                                                    <input
+                                                        type="text"
+                                                        className="bg-yellow-100 rounded-2xl w-full pl-3 pr-20 py-1 border border-black text-sm underline"
+                                                        name="task_name"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className="absolute right-11"
+                                                        onClick={() => {
+                                                            setShowTaskInput(undefined);
+                                                        }}
+                                                    >
+                                                        <CircleX className="h-5 cursor-pointer" />
+                                                    </button>
+                                                    <button type="submit" className="absolute right-3">
+                                                        <CircleCheck className="h-5 cursor-pointer" />
+                                                    </button>
+                                                </form>
+                                            )}
                                             {task_list.tasks.map(
                                                 (task, task_index) =>
                                                     !task.is_done && (
